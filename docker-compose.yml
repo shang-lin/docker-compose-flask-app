@@ -1,9 +1,8 @@
 version: "3"
 services:
-  a:
+  service_a:
     # replace username/repo:tag with your name and image details
     image: service_a:latest 
-    container_name: service_a
     environment:
       - VIRTUAL_HOST=service_a.local
     deploy:
@@ -14,12 +13,12 @@ services:
           memory: 50M
       restart_policy:
         condition: on-failure
-    ports:
-      - "80:80"
     networks:
       - webnet
-  b:
+  service_b:
     image: service_b
+    environment:
+      - VIRTUAL_HOST=service_b.local
     deploy:
       replicas: 1
       resources:
@@ -28,12 +27,12 @@ services:
           memory: 50M
       restart_policy:
         condition: on-failure
-    ports:
-      - "81:80"
     networks:
       - webnet
   foo:
     image: foo
+    environment:
+      - VIRTUAL_HOST=foo.local
     deploy:
       replicas: 1
       resources:
@@ -42,12 +41,12 @@ services:
           memory: 50M
       restart_policy:
         condition: on-failure
-    ports:
-      - "82:80"
     networks:
       - webnet2
   bar:
     image: bar
+    environment:
+      - VIRTUAL_HOST=bar.local
     deploy:
       replicas: 1
       resources:
@@ -56,9 +55,17 @@ services:
           memory: 50M
       restart_policy:
         condition: on-failure
-    ports:
-      - "83:80"
     networks:
+      - webnet2
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - webnet
       - webnet2
 
 networks:
