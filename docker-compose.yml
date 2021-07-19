@@ -2,9 +2,10 @@ version: "3"
 services:
   service_a:
     # replace username/repo:tag with your name and image details
-    image: service_a:latest 
+    image: flask-service:latest 
     environment:
       - VIRTUAL_HOST=service_a.local
+      - SERVICE_NAME=service_a
     deploy:
       replicas: 1
       resources:
@@ -16,9 +17,10 @@ services:
     networks:
       - webnet
   service_b:
-    image: service_b
+    image: flask-service:latest
     environment:
       - VIRTUAL_HOST=service_b.local
+      - SERVICE_NAME=service_b
     deploy:
       replicas: 1
       resources:
@@ -30,9 +32,10 @@ services:
     networks:
       - webnet
   foo:
-    image: foo
+    image: flask-service:latest
     environment:
       - VIRTUAL_HOST=foo.local
+      - SERVICE_NAME=foo
     deploy:
       replicas: 1
       resources:
@@ -44,9 +47,10 @@ services:
     networks:
       - webnet2
   bar:
-    image: bar
+    image: flask-service:latest
     environment:
       - VIRTUAL_HOST=bar.local
+      - SERVICE_NAME=bar
     deploy:
       replicas: 1
       resources:
